@@ -6,8 +6,8 @@ global:
 scrape_configs:
   - job_name: azure_resourcegraph_examples
     scrape_interval: 1m
-    # It seems that metrics_path pulls the Azure ResourceGraph metrics from the exporter and makes them available in Prometheus?
-    metrics_path: /probe?module=summary
+    # TODO: Gain a better understanding of what the metrics_path does in Promtheus.
+    metrics_path: /metrics
     params: {}
     static_configs:
       - targets: ["host.docker.internal:8080"]
