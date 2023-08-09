@@ -1,0 +1,12 @@
+# Example for the azure-metrics:####/probe/metrics endpoint
+---
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+scrape_configs:
+  - job_name: azure-rg-example
+    scrape_interval: 1m
+    metrics_path: /probe
+    params: {}
+    static_configs:
+      - targets: ["azure-resourcegraph-metrics:8080"]
