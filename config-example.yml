@@ -5,7 +5,6 @@ queries:
     # skip metric publishing
     # and only publish sub metrics rows (and use configuration only for submetrics)
     # publish: false
-
     # Azure ResourceGraph query
     query: |-
       Resources
@@ -67,29 +66,29 @@ queries:
       type: ignore
 
 
-  - metric: azure_resourcestype_count
-    ## only responds to /probe?module=summary
-    module: summary
-    query: |-
-      Resources
-      | summarize count() by type
-    fields:
-      ## use count_ as metrics value
-      ## hint: result field  must be int or float
-      - name: count_
-        type: value
+  # - metric: azure_resourcestype_count
+  #   ## only responds to /probe?module=summary
+  #   module: summary
+  #   query: |-
+  #     Resources
+  #     | summarize count() by type
+  #   fields:
+  #     ## use count_ as metrics value
+  #     ## hint: result field  must be int or float
+  #     - name: count_
+  #       type: value
 
-  - metric: azure_resourcestype
-    ## only responds to /probe?module=summary
-    module: summary
-    query: |-
-      Resources
-      | project type, tags
-    ## only use following subscriptions
-    subscriptions2:
-      - edcfeb7c-254b-4ebc-a49f-de1c22bc5b77
-    fields:
-      ## use count_ as metrics value
-      ## hint: result field  must be int or float
-      - name: count_
-        type: value
+  # - metric: azure_resourcestype
+  #   ## only responds to /probe?module=summary
+  #   module: summary
+  #   query: |-
+  #     Resources
+  #     | project type, tags
+  #   ## only use following subscriptions
+  #   subscriptions2:
+  #     - edcfeb7c-254b-4ebc-a49f-de1c22bc5b77
+  #   fields:
+  #     ## use count_ as metrics value
+  #     ## hint: result field  must be int or float
+  #     - name: count_
+  #       type: value

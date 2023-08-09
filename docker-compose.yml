@@ -6,7 +6,7 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - ./prometheus-metrics.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
   azure-resourcegraph-metrics:
     image: webdevops/azure-resourcegraph-exporter:latest
     environment:
@@ -16,5 +16,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - ./example.yml:/etc/configs/example.yml
-    command: azure-resourcegraph-exporter --config=/etc/configs/example.yml
+      #- ./example.yml:/etc/configs/example.yml ## Example 1 - /metrics endpoint
+      - ./config-probe-module.yml:/etc/configs/config-probe-module.yml ## Example 2 - /probe?module={MODULE_NAME}; MODULE_NAME=summary
+    #command: azure-resourcegraph-exporter --config=/etc/configs/example.yml ## Example 1 - /metrics endpoint
+    command: azure-resourcegraph-exporter --config=/etc/configs/config-probe-module.yml ## Example 2 - /probe?module={MODULE_NAME}; MODULE_NAME=summary
