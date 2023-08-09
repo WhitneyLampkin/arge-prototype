@@ -1,0 +1,95 @@
+queries:
+    # name of metric
+  - metric: azure_resources
+
+    # skip metric publishing
+    # and only publish sub metrics rows (and use configuration only for submetrics)
+    # publish: false
+
+    # Azure ResourceGraph query
+    query: |-
+      Resources
+      | top 50 by name desc
+
+    ## default value for metric
+    ## eg for static metrics like informational metrics
+    value: 1
+
+    ## additional labels (optional)
+    labels:
+      scope: resources
+
+    fields:
+        ## name of the field from the result
+      - name: id
+        ## target name for metric label
+        target: resourceId
+        ## type of field
+        ##   id: use as identification (added to sub metrics)
+        ##   value: value of metric
+        ##   expand: parse value as sub json structure and create sub metric
+        ##   ignore: do not add this field
+        type: id
+
+        ## apply filter to value
+        ## available filters: toLower, toUpper, toTitle
+        filters: [toLower]
+
+        ## example for regexp manipulation
+        ## replace microsoft with foobar
+      - name: type
+        filters:
+          - type: regexp
+            regexp: "microsoft(.*)"
+            replacement: "foobar$1"
+
+      - name: enableRbacAuthorization
+        type: ignore
+
+      ## expand tags into own metric
+      - name: tags
+        metric: azure_resources_tags
+        expand: {}
+        ## additional labels (optional)
+        labels:
+          scope: resourcetags
+
+      ## expand properties
+      - name: properties
+        metric: azure_resources_props
+        expand:
+          fields:
+            ## ignore this field
+            - name: enableRbacAuthorization
+              type: ignore
+
+    defaultField:
+      type: ignore
+
+
+  - metric: azure_resourcestype_count
+    ## only responds to /probe?module=summary
+    module: summary
+    query: |-
+      Resources
+      | summarize count() by type
+    fields:
+      ## use count_ as metrics value
+      ## hint: result field  must be int or float
+      - name: count_
+        type: value
+
+  - metric: azure_resourcestype
+    ## only responds to /probe?module=summary
+    module: summary
+    query: |-
+      Resources
+      | project type, tags
+    ## only use following subscriptions
+    subscriptions2:
+      - edcfeb7c-254b-4ebc-a49f-de1c22bc5b77
+    fields:
+      ## use count_ as metrics value
+      ## hint: result field  must be int or float
+      - name: count_
+        type: value

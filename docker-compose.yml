@@ -1,0 +1,20 @@
+---
+version: "3.9"
+services:
+  prometheus:
+    image: prom/prometheus:v2.40.4
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus-metrics.yml:/etc/prometheus/prometheus.yml
+  azure-resourcegraph-metrics:
+    image: webdevops/azure-resourcegraph-exporter:latest
+    environment:
+      - AZURE_CLIENT_ID=33d45b42-c91e-4feb-a8d5-386519da560b
+      - AZURE_TENANT_ID=85ba479b-1f01-45f4-9d67-aa4775cc6737 # TenantId
+      - AZURE_CLIENT_SECRET=wPt8Q~UWJn.XXc8JdMOOerr9G25QnlnFpvKAca__
+    ports:
+      - 8080:8080
+    volumes:
+      - ./example.yml:/etc/configs/example.yml
+    command: azure-resourcegraph-exporter --config=/etc/configs/example.yml
