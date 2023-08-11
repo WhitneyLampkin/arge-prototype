@@ -19,9 +19,10 @@ queries:
       | project type, tags
     ## only use following subscriptions
     subscriptions2:
-      - edcfeb7c-254b-4ebc-a49f-de1c22bc5b77
+      - ["edcfeb7c-254b-4ebc-a49f-de1c22bc5b77"]
     fields:
       ## use count_ as metrics value
       ## hint: result field  must be int or float
       - name: count_
         type: value
+        
